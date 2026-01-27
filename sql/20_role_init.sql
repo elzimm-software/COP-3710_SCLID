@@ -1,0 +1,3 @@
+CREATE ROLE desktop;
+CREATE ROLE mobile;
+CREATE ROLE pos;

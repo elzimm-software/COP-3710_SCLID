@@ -15,3 +15,7 @@ Sclid aims to be a fully qualified inventory management system for single locati
 **Description:** https://www.kaggle.com/datasets/harshsingh2209/supply-chain-analysis
 
 **Download:** https://www.kaggle.com/api/v1/datasets/download/harshsingh2209/supply-chain-analysis
+
+## DBMS
+
+Sclid is slated to use PostgreSQL for its serverside portability and stability.

@@ -1,0 +1,156 @@
+@startuml
+
+hide circle
+skinparam linetype ortho
+skinparam style strictuml
+
+package "Inventory" as inv {
+    entity "Product" as prod {
+        PK: upc
+        FK: prefered_supplier
+        --
+        sku
+        price
+        quantity
+        location
+        minimum_quantity
+    }
+
+    entity "Product Supplied" as prod_supp {
+        PK, FK: upc
+        PK, FK: supplier_id
+        --
+        total_price
+        price_per_unit
+        lead_time
+    }
+
+    entity "Supplier" as supp {
+        PK: supplier_id
+        --
+        phone_number
+
+    }
+}
+
+prod||--|{prod_supp
+supp||--o{prod_supp
+prod||--o|supp
+
+package "Register" as reg {
+    entity "Sale" as sale {
+        PK: reciept_num
+        --
+        date
+        time
+        cashier
+        total_sale
+    }
+
+    package "Discount" as disc {
+
+        entity "Transaction Discount" as trans_disc {
+            PK, FK: reciept_num
+            FK: authorizer
+            --
+            discount_amount
+        }
+
+        entity "Line Discount" as line_disc {
+            PK, FK: upc
+            PK, FK: reciept_num
+            FK: authorizer
+            --
+            discount_amount
+        }
+    }
+
+    entity "Product Sold" as prod_sold {
+        PK, FK: upc
+        PK, FK: reciept_num
+        --
+        sale_price
+    }
+}
+
+package "Employee Management" as emp_man {
+    entity "Employee" as emp {
+        PK: employee_num
+        FK: role_id
+        --
+        first_name
+        last_name
+    }
+
+
+    package "Pay Modality (disjoint)" as pay_mod {
+        entity "Salary" as sal {
+            PK, FK: employee_num
+            --
+            amount
+        }
+
+        entity "Hourly" as hour {
+            PK, FK: employee_num
+            --
+            rate
+        }
+    }
+
+    package "Role (overlap)" as role {
+        entity "Manager" as manager {
+            PK, FK: employee_num
+        }
+
+        entity "Cashier" as cash {
+            PK, FK: employee_num
+        }
+
+        entity "Stocker" as stk {
+            PK, FK: employee_num
+        }
+    }
+
+}
+
+package "Warehouse" as wh {
+    entity "Shipment" as ship {
+        PK: shipment_id
+        --
+        date_created
+        time_created
+        date_arrived
+        time_arrived
+        total_cartons
+        FK: received_by
+    }
+
+    entity "Product Shipped" as prod_ship {
+        PK, FK: shipment_id
+        PK, FK: product_id
+        PK, FK: supplier_id
+        --
+        quantity
+    }
+}
+
+ship||--|{prod_ship : includes
+prod||--o{prod_ship : included in
+supp||--o{prod_ship : supplied by
+
+ship}|..||stk
+emp|o--o|cash : trained as
+emp|o--o|manager : trained as
+emp|o--o|stk : trained as
+emp||--o|sal : paid as
+emp||--o|hour : paid as
+manager||..o{trans_disc : authorizes
+manager||..o{line_disc : authorizes
+cash||..o{sale : handles
+
+sale||--o{trans_disc
+sale||--|{prod_sold
+prod||--o{prod_sold
+prod_sold||--o{line_disc
+
+@enduml

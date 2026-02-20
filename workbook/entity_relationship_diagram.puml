@@ -1,0 +1,101 @@
+@startuml
+
+hide circle
+skinparam linetype ortho
+
+package "Inventory" as inv {
+    entity "Product" as prod {
+        PK: upc
+        sku
+        price
+        quantity
+        location
+    }
+
+    entity "Product Supplied" as prod_supp {
+        PK, FK: upc
+        PK, FK: supplier_id
+        total_price
+        price_per_unit
+        lead_time
+    }
+
+    entity "Supplier" as supp {
+        PK: supplier_id
+        phone_number
+
+    }
+}
+
+prod||--|{prod_supp
+supp||--o{prod_supp
+
+package "KPI Metrics" as kpi {
+    entity "Sale" as sale {
+        PK: reciept_num
+        time
+        cashier
+        total_sale
+    }
+
+    entity "Transaction Discount" as trans_disc {
+        PK, FK: reciept_num
+        discount_amount
+    }
+
+    entity "Line Discount" as line_disc {
+        PK, FK: upc
+        PK, FK: reciept_num
+        FK: authorizer
+        discount_amount
+    }
+
+    entity "Product Sold" as prod_sold {
+        PK, FK: upc
+        PK, FK: reciept_num
+        FK: authorizer
+        sale_price
+    }
+}
+
+package "Employee Management" as emp_man {
+    entity "Employee" as emp {
+        PK: employee_num
+        first_name
+        last_name
+        role_id
+    }
+
+    package "Pay Modality" as pay_mod {
+        entity "Salary" as sal {
+
+        }
+
+        entity "Hourly" as hour {
+
+        }
+    }
+
+    entity "Manager" as manager {
+        PK, FK: employee_num
+    }
+
+    entity "Role" as role {
+        PK: role_id
+        role_title
+    }
+}
+
+emp||..||role
+emp|o--o|manager
+emp|o--o|sal
+emp|o--o|hour
+manager||..o{trans_disc
+manager||..o{line_disc
+
+sale||--o{trans_disc
+sale||--|{prod_sold
+prod||--o{prod_sold
+prod_sold||--o{line_disc
+
+@enduml

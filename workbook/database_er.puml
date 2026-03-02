@@ -20,8 +20,8 @@ package "Inventory" as inv {
         PK, FK: upc
         PK, FK: supplier_id
         --
-        total_price
         price_per_unit
+        shipping_cost
         lead_time
     }
 

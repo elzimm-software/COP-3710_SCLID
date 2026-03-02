@@ -76,7 +76,6 @@ package "Register" as reg {
 package "Employee Management" as emp_man {
     entity "Employee" as emp {
         PK: employee_num
-        FK: role_id
         --
         first_name
         last_name

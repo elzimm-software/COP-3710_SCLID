@@ -1,0 +1,81 @@
+#+title: Normalization Report
+
+* Functional Dependencies
+** Inventory Tables
+*** Product
+upc: preferred_supplier, sku, price, quantity, location, minimum_quantity
+
+This table is BCNF because each attribute is defined by the upc.
+
+*** Supplier
+supplier_id: name, phone_number
+
+This table is BCNF because name and phone number are defined by supplier id.
+
+*** Product Supplied
+upc, supplier_id: price_per_unit, lead_time, shipping_cost
+
+Swapped total_price, which depended on price_per_unit, for shipping cost to satisfy 3NF.
+This table is BCNF because each item from a given supplier may have a different price, lead time, and shipping cost.
+
+** Warehouse Tables
+*** Shipment
+shipment_id: received_by, date_created, time_created, date_arrived, time_arrived, total_cartons
+
+This table is BCNF because each shipment's attributes are dependent only on shipment_id.
+
+*** Product Shipped
+shipment_id, product_id, supplier_id: quantity
+
+This table is BCNF because quantity is tracked separately for products from different suppliers and in different shipments.
+
+** Employee Management Tables
+*** Employee
+employee_num: first_name, last_name
+
+Removed role_id as it is not dependent on any candidate key and thus violates 3NF.
+This table is BCNF because name is dependent on employee number.
+
+*** Role Tables (overlap)
+These three tables are in BCNF because there is only the primary key.
+
+**** Stocker
+employee_num
+
+**** Cashier
+employee_num
+
+**** Manager
+employee_num
+
+*** Pay Modality Tables (disjoint)
+These two tables are in BCNF because all dependencies rely only on the entire primary key.
+
+**** Hourly
+employee_num: rate
+
+**** Salary
+employee_num: amount
+
+** Register Tables
+*** Sale
+receipt_num: date, time, cashier
+
+Removed total_sale due to dependency on Product Sold table.
+This table is BCNF because date, time, and cashier depend only on receipt number.
+
+*** Product Sold
+upc, receipt_num: sale_price
+
+This table is BCNF because the sale price for each item is uniquely determined by upc and receipt number.
+
+*** Discount Tables
+**** Transaction Discount
+receipt_num: authorizer, discount_amount
+
+This table is BCNF because a transaction discount applies to the whole receipt.
+
+**** Line Discount
+upc, receipt_num: authorizer, discount_amount
+
+This table is BCNF because a line discount applies to a specific item.

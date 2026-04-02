@@ -10,12 +10,14 @@ It encompases a desktop GUI for inventory management and product order generatio
 
 Sclid aims to be a fully qualified inventory management system for single location retail businesses.  In its various forms, it may be used by management, warehouse, and sales personel.
 
-## Dataset
+## Datasets
 
-**Description:** https://www.kaggle.com/datasets/harshsingh2209/supply-chain-analysis
+**Products:** https://www.kaggle.com/datasets/salahuddinahmedshuvo/grocery-inventory-and-sales-dataset
 
-**Download:** https://www.kaggle.com/api/v1/datasets/download/harshsingh2209/supply-chain-analysis
+**Employees:** https://www.kaggle.com/datasets/abdallahwagih/company-employees
+
+**Sales:** https://www.kaggle.com/datasets/mohammadtalib786/retail-sales-dataset
 
 ## DBMS
 
-Sclid is slated to use PostgreSQL for its serverside portability and stability.
+Sclid uses MariaDB for its serverside portability and stability.

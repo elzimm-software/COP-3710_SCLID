@@ -14,6 +14,7 @@ package "Inventory" as inv {
         quantity
         location
         minimum_quantity
+        replen_quantity
     }
 
     entity "Product Supplied" as prod_supp {
@@ -28,6 +29,7 @@ package "Inventory" as inv {
     entity "Supplier" as supp {
         PK: supplier_id
         --
+        name
         phone_number
 
     }
@@ -40,25 +42,26 @@ prod||--o|supp
 package "Register" as reg {
     entity "Sale" as sale {
         PK: reciept_num
+        FK: cashier
         --
-        date
-        time
-        cashier
+        made_at
         total_sale
     }
 
     package "Discount" as disc {
 
         entity "Transaction Discount" as trans_disc {
-            PK, FK: reciept_num
+            PK: discount_id
+            FK: reciept_num
             FK: authorizer
             --
             discount_amount
         }
 
         entity "Line Discount" as line_disc {
-            PK, FK: upc
-            PK, FK: reciept_num
+            PK: discount_id
+            FK: upc
+            FK: reciept_num
             FK: authorizer
             --
             discount_amount
@@ -116,12 +119,16 @@ package "Warehouse" as wh {
     entity "Shipment" as ship {
         PK: shipment_id
         --
-        date_created
-        time_created
-        date_arrived
-        time_arrived
+        created_at
         total_cartons
+    }
+
+    entity "Shipment Receipt" as ship_rep {
+        PK, FK: shipment_id
+        PK, FK: received_at
+        --
         FK: received_by
+        cartons_received
     }
 
     entity "Product Shipped" as prod_ship {
@@ -136,8 +143,9 @@ package "Warehouse" as wh {
 ship||--|{prod_ship : includes
 prod||--o{prod_ship : included in
 supp||--o{prod_ship : supplied by
+ship_rep}|--||ship : received
+ship_rep||..||stk : received by
 
-ship}|..||stk
 emp|o--o|cash : trained as
 emp|o--o|manager : trained as
 emp|o--o|stk : trained as

@@ -2,6 +2,26 @@
 
 Sclid is a supply chain database integrating suppliers, inventory, shipments, and delays.  Includes bottleneck detection queries, trigger-based inventory alerts, and indexed joins.
 
+## Useage
+
+Clone the repo: `git clone https://github.com/elzimm-software/COP-3710_SCLID`
+
+Enter the cloned directory: `cd COP-3710_SCLID`
+
+Initialize a MariaDB instance with a sclid database and user.
+
+Activate the python .venv: `source ./python/.venv/activate`
+
+Install dependencies: `pip install -r python/requirements.txt`
+
+Run preprocessor: `python ./python/preprocessor.py`
+
+Enter MariaDB instance connection info into `loaddata.py` and `app.py`.
+
+Run data load: `python ./python/loaddata.py`
+
+Run application: `python ./python/app.py`
+
 ## Scope
 
 It encompases a desktop GUI for inventory management and product order generation, a mobile app for location and price management on the salesfloor, and a point of sale system to tracking outgoing product and KPI generation.  All systems interface with an in-store database to ensure data is synced between all instances.  Order forms can be generated as CSV files for manual ordering or cXML PunchOut for automated ordering.  Products can define minimum quanitiy alerts or leverage algorithmic, smart product ordering which uses historic sales trends to ensure replishment arrives before the product is completely depleted.
